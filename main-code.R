@@ -39,9 +39,29 @@ datavoronoi <- function(data) {
   return(output)  # Return list
 }
 
+# Create a simple Lemaitre's plot
+plotlemaitre <- function(output,add=FALSE,mycex=2,mypch=19,ymax=10,ymin=-0.9,defaultcol=rgb(red = 0, green = 0, blue = 1, alpha = 0.3)) {
+  with(output,{
+    if(add==FALSE) { # if add=TRUE, adds new data to current plot
+      plot(p61,1/(2*pi*p61^2),type='l',xlab=expression(p[6])
+           ,ylab=expression(mu[2]),ylim=c(ymin,ymax),xlim=c(0,1),lwd=4,bty='l',
+           cex.lab=2,cex.axis=1.5,main="Lemaitre's plot",cex.main=2);
+      lines(p62,1-p62,lty=2,lwd=4)  ;}
+    # points(lem[1],lem[2],pch=mypch,col=defaultcol,cex=mycex)} # True data
+    points(lem[1],lem[2],pch=mypch,col=1,bg=defaultcol,cex=mycex)} # True data
+  )
+}
 
 
 # Find clusters: If flag=0 it creates randomly N coordinates to illustrate how the code works.
+# Auxiliary function for clustering
+cluster.stats <- function(c) {
+  k <- rle(sort(c))
+  hist(c,plot = F)
+  largest <- k$lengths[which.max(k$lengths)]/length(c)*100
+  return(largest)
+}
+
 # The thresh value is fixed according to the experimental scale
 mycluster <- function(dataset,N=10,thresh=1,flag=1) {
   if(flag==0) {
